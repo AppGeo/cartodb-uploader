@@ -19,5 +19,9 @@
   "devDependencies": {
     "jsonstream2a": "^2.0.3",
     "tape": "^4.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:calvinmetcalf/cartodb-uploader.git"
   }
 }
