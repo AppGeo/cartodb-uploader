@@ -1,6 +1,6 @@
 {
   "name": "carto-uploader",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Upload a stream into CartoDB",
   "main": "index.js",
   "scripts": {
@@ -25,7 +25,7 @@
     "type": "git",
     "url": "git@github.com:calvinmetcalf/cartodb-uploader.git"
   },
-  "bin" :{
+  "bin": {
     "cartodb": "./bin.js"
   }
 }
