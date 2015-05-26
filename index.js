@@ -7,6 +7,7 @@ var debug = require('debug')('cartodb-uploader');
 var FormData = require('form-data');
 var geojsonStream = require('geojson-stream');
 var once = require('once');
+var zlib = require('zlib');
 module.exports = exports = cartodbUploader;
 function getUploadState(credentials, destination, callback) {
   var rawUrl = 'https://' + credentials.user + '.cartodb.com/api/v1/imports/' + destination + '?' + qs.stringify({
@@ -43,8 +44,13 @@ function getUploadState(credentials, destination, callback) {
 }
 function noop(){}
 function cartodbUploader(credentials, fileName, callback) {
+  var compress = false;
+  if (['zip', '.gz', 'bz2', 'tgz', 'kmz', 'lsx', 'ods'].indexOf(fileName.slice(-3)) === -1) {
+    fileName = fileName += '.gz';
+    compress = true;
+  }
   callback = once(callback || noop);
-  var passthrough = new stream.PassThrough();
+  var passthrough = compress ? zlib.createGzip() : new stream.PassThrough();
   passthrough.on('error', callback);
   var form = new FormData();
   form.append('file', passthrough, {
@@ -95,6 +101,7 @@ function uploadGeoJson(credentials, destination, callback) {
   callback = once(callback);
   var inStream = geojsonStream.stringify();
   inStream.on('error', callback);
-  inStream.pipe(cartodbUploader(credentials, destination + '.geojson', callback));
+  inStream
+    .pipe(cartodbUploader(credentials, destination + '.geojson.gz', callback));
   return inStream;
 }

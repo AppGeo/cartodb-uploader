@@ -46,3 +46,35 @@ featureStream.pipe(cartodbUploader({
   // optional callback when done
 }));
 ```
+
+## CLI API
+
+```bash
+npm install -g cartodb-uploader
+```
+
+Upload a file named `foo.geojson`
+
+```bash
+cartodb -f foo.geojson -a apikey -u username
+```
+
+or you can set the apikey as an enviromental variable
+
+```bash
+export CARTODB_API_KEY=apikey
+export CARTODB_USER_NAME=uername
+cartodb foo.geojson
+```
+
+or give it a different name
+
+```bash
+cartodb TEMP_BLAH -n foo.geojson
+```
+
+the name can be combined with stdin
+
+```bash
+curl some/url | cartodb -n foo.geojson
+```
