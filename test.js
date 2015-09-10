@@ -1,6 +1,6 @@
 'use strict';
 var uploader = require('./');
-var jsonstream = require('jsonstream2a');
+var jsonstream = require('jsonstream3');
 var fs = require('fs');
 var auth = require('./auth.json');
 var test = require('tape');
