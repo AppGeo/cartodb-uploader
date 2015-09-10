@@ -8,7 +8,7 @@ streaming upload to cartodb, arguemnts are
 - callback (optional) to be called when the table ends up being created
 
 returns a writable stream that accepts the file, acceptable file extensions are
-(accourding to cartodb)[http://docs.cartodb.com/cartodb-editor.html#supported-file-formats]
+[accourding to cartodb](http://docs.cartodb.com/cartodb-editor.html#supported-file-formats)
 
 - csv
 - tab
