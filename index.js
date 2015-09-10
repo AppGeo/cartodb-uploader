@@ -1,7 +1,7 @@
 'use strict';
 var https = require('https');
 var http = require('http');
-var stream = require('io-stream');
+var stream = require('readable-stream');
 var url = require('url');
 var qs = require('querystring');
 var debug = require('debug')('cartodb-uploader');
