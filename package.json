@@ -1,6 +1,6 @@
 {
   "name": "cartodb-uploader",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Upload a stream into CartoDB",
   "main": "index.js",
   "scripts": {
