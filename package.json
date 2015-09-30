@@ -20,12 +20,11 @@
   },
   "devDependencies": {
     "jsonstream3": "^3.0.0",
-    "shapefile": "calvinmetcalf/shapefile#real-streams",
     "tape": "^4.0.0"
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:calvinmetcalf/cartodb-uploader.git"
+    "url": "git@github.com:AppGeo/cartodb-uploader.git"
   },
   "bin": {
     "cartodb": "./bin.js"
