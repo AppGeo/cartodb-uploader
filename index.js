@@ -11,7 +11,7 @@ var once = require('once');
 var zlib = require('zlib');
 module.exports = exports = cartodbUploader;
 function getUploadState(credentials, destination, callback) {
-  var rawUrl = 'https://' + credentials.user + '.cartodb.com/api/v1/imports/' + destination + '?' + qs.stringify({
+  var rawUrl = 'https://' + credentials.user + '.carto.com/api/v1/imports/' + destination + '?' + qs.stringify({
       api_key: credentials.key
   });
   https.get(rawUrl, function (res) {
@@ -25,6 +25,7 @@ function getUploadState(credentials, destination, callback) {
       .on('end', function (){
         var out = Buffer.concat(data).toString();
         if (res.statusCode > 299) {
+          debug(res.headers);
           callback(out);
         } else {
           try {
@@ -60,7 +61,7 @@ function cartodbUploader(credentials, fileName, callback) {
     contentType: 'application/octet-stream'
   });
   form.on('error', callback);
-  var fullUrl = 'https://' + credentials.user + '.cartodb.com/api/v1/imports?';
+  var fullUrl = 'https://' + credentials.user + '.carto.com/api/v1/imports?';
   //var fullUrl = 'http://cartodb.calvin:8080/';
   fullUrl += qs.stringify({
       api_key: credentials.key
@@ -94,6 +95,7 @@ function cartodbUploader(credentials, fileName, callback) {
             .on('end', function (){
               var out = Buffer.concat(data).toString().trim();
               if (res.statusCode > 299) {
+                debug(res.headers);
                 callback(out || new Error(http.STATUS_CODES[res.statusCode]));
               } else {
                 try {
