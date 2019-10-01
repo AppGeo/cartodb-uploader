@@ -11,8 +11,8 @@ var once = require('once');
 var zlib = require('zlib');
 module.exports = exports = cartodbUploader;
 function getUploadState(credentials, destination, callback) {
-  var rawUrl = 'https://' + credentials.user + '.carto.com/api/v1/imports/' + destination + '?' + qs.stringify({
-      api_key: credentials.key
+  var rawUrl = createUrlBase(credentials) + '/api/v1/imports/' + destination + '?' + qs.stringify({
+    api_key: credentials.key
   });
   https.get(rawUrl, function (res) {
     var data = [];
@@ -61,7 +61,7 @@ function cartodbUploader(credentials, fileName, callback) {
     contentType: 'application/octet-stream'
   });
   form.on('error', callback);
-  var fullUrl = 'https://' + credentials.user + '.carto.com/api/v1/imports?';
+  var fullUrl = createUrlBase(credentials) + '/api/v1/imports?';
   //var fullUrl = 'http://cartodb.calvin:8080/';
   fullUrl += qs.stringify({
       api_key: credentials.key
@@ -126,4 +126,18 @@ function uploadGeoJson(credentials, destination, callback) {
   inStream.on('error', callback)
     .pipe(cartodbUploader(credentials, destination + '.geojson', callback));
   return inStream;
+}
+function createUrlBase(credentials) {
+  if (!credentials.domain && !credentials.subdomainless) {
+    return `https://${credentials.user}.carto.com`;
+  }
+  if (credentials.domain) {
+    if (credentials.subdomainless) {
+      return `https://${credentials.domain}/user/${credentials.user}`;
+    } else {
+      return `https://${credentials.user}.${credentials.domain}`;
+    }
+  } else if (credentials.subdomainless) {
+    return `https://carto.com/user/${credentials.user}`;
+  }
 }

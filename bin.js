@@ -16,6 +16,12 @@ var argv = require('yargs')
     .alias('a', 'apikey')
     .describe('a', 'specify cartodb apikey'.yellow)
     .default('a', null, '$CARTODB_API_KEY')
+    .alias('s', 'subdomainless')
+    .boolean('s')
+    .default('s', undefined)
+    .describe('s', 'whether to use subdomainless url mode'.yellow)
+    .alias('D', 'domain')
+    .describe('D', 'whether to use the non default domain'.yellow)
     .example('$0 -f foo.geojson', 'uploads the file foo.geojson'.green)
     .example('$0 -n foo.geojson', 'sets name of the file, if -f is not specified uses stdin '.green)
     .help('h', 'Show Help'.yellow)
@@ -68,7 +74,9 @@ if (argv.n) {
 
 instream.pipe(uploader({
   user: user,
-  key: key
+  key: key,
+  domain: argv.D,
+  subdomainless: argv.s
 }, name, function (err, resp) {
   if (err) {
     process.stdout.write(JSON.stringify(err, false, 2));
