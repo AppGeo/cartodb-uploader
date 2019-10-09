@@ -11,7 +11,7 @@ var once = require('once');
 var zlib = require('zlib');
 module.exports = exports = cartodbUploader;
 function getUploadState(credentials, destination, callback) {
-  var rawUrl = 'https://' + credentials.user + '.carto.com/api/v1/imports/' + destination + '?' + qs.stringify({
+  var rawUrl = createBaseUrl(credentials) + '/api/v1/imports/' + destination + '?' + qs.stringify({
       api_key: credentials.key
   });
   https.get(rawUrl, function (res) {
@@ -45,6 +45,20 @@ function getUploadState(credentials, destination, callback) {
   });
 }
 function noop(){}
+function createBaseUrl(credentials) {
+  if (!credentials.domain && !credentials.subdomainless) {
+    return `https://${credentials.user}.carto.com`;
+  }
+  if (credentials.domain) {
+    if (credentials.subdomainless) {
+      return `https://${credentials.domain}/user/${credentials.user}`;
+    } else {
+      return `https://${credentials.user}.${credentials.domain}`;
+    }
+  } else if (credentials.subdomainless) {
+    return `https://carto.com/user/${credentials.user}`;
+  }
+}
 function cartodbUploader(credentials, fileName, callback) {
   debug('starting upload');
   var compress = false;
@@ -61,7 +75,7 @@ function cartodbUploader(credentials, fileName, callback) {
     contentType: 'application/octet-stream'
   });
   form.on('error', callback);
-  var fullUrl = 'https://' + credentials.user + '.carto.com/api/v1/imports?';
+  var fullUrl = createBaseUrl(credentials) + '/api/v1/imports?';
   //var fullUrl = 'http://cartodb.calvin:8080/';
   fullUrl += qs.stringify({
       api_key: credentials.key
